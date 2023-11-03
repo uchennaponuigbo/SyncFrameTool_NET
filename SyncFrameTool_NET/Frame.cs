@@ -100,6 +100,7 @@ namespace SyncFrameTool_NET
             ushort minutes = 0;
             ushort hours = 0;
 
+            //TODO: calculation logic errors with huge timespans, find a fix
             if (seconds >= 60)
             {
                 minutes = (ushort)(seconds / 60);
