@@ -90,7 +90,7 @@
             // label2
             // 
             label2.Font = new Font("Segoe UI", 28.2F, FontStyle.Regular, GraphicsUnit.Point);
-            label2.Location = new Point(318, 113);
+            label2.Location = new Point(318, 121);
             label2.Name = "label2";
             label2.Size = new Size(54, 54);
             label2.TabIndex = 4;
@@ -118,7 +118,7 @@
             groupBox1.Controls.Add(txtEndMinute);
             groupBox1.Controls.Add(txtEndHour);
             groupBox1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            groupBox1.Location = new Point(371, 52);
+            groupBox1.Location = new Point(371, 63);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(249, 127);
             groupBox1.TabIndex = 8;
@@ -229,6 +229,7 @@
             // 
             // lblRefErrorMessage
             // 
+            lblRefErrorMessage.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
             lblRefErrorMessage.Location = new Point(72, 252);
             lblRefErrorMessage.Name = "lblRefErrorMessage";
             lblRefErrorMessage.Size = new Size(249, 69);
@@ -410,6 +411,7 @@
             // 
             // lblSuggestion
             // 
+            lblSuggestion.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
             lblSuggestion.Location = new Point(671, 252);
             lblSuggestion.Name = "lblSuggestion";
             lblSuggestion.Size = new Size(215, 56);
@@ -418,6 +420,7 @@
             // 
             // lblEndErrorMessage
             // 
+            lblEndErrorMessage.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
             lblEndErrorMessage.Location = new Point(371, 252);
             lblEndErrorMessage.Name = "lblEndErrorMessage";
             lblEndErrorMessage.Size = new Size(249, 69);

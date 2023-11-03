@@ -17,6 +17,7 @@ namespace SyncFrameTool_NET
             Second,
             Frame
         }
+
         public formSyncFrameTool()
         {
             InitializeComponent();
@@ -28,7 +29,6 @@ namespace SyncFrameTool_NET
 
             cboFrameRate.SelectedIndexChanged -= cboFrameRate_SelectedIndexChanged;
             cboFrameRate.SelectedIndex = 2;
-            //maskReferenceTime.Text = lblReferenceTime.Text;
 
             videoTimerFrame = new ManageVideoTimerFrame((Convert.ToUInt16(cboFrameRate.SelectedItem)));
 
@@ -37,47 +37,14 @@ namespace SyncFrameTool_NET
             lblRefErrorMessage.Text = lblEndErrorMessage.Text = lblSuggestion.Text = "";
         }
 
-        //public string TimeFormat(TextBox time)
-        //{
-        //    if (time.MaxLength == 1)
-        //    {
-        //        if (time.Text.Length == 0)
-        //            return "0";
-        //        else
-        //            return time.Text;
-        //    }
-        //    else
-        //    {
-        //        if (time.Text.Length == 0)
-        //            return "00";
-        //        else if (time.Text.Length == 1)
-        //            return $"0{time.Text}";
-        //        else
-        //            return time.Text;
-        //    }
-        //}
-
-
         private void btnSetReferenceTime_Click(object sender, EventArgs e)
         {
-            //StringBuilder timeBuilder = new StringBuilder("");
-
-            //timeBuilder.Append($"{TimeFormat(txtRefHour)}:");
-            //timeBuilder.Append($"{TimeFormat(txtRefMinute)}:");
-            //timeBuilder.Append($"{TimeFormat(txtRefSecond)}.");
-            //timeBuilder.Append($"{TimeFormat(txtRefFrame)}");
-
-            //lblReferenceTime.Text = timeBuilder.ToString();
             lblReferenceTime.Text = referenceTimeToken.ToString();
-
-            //VideoTimer refTimer = new VideoTimer();
-            //(Convert.ToUInt16(txtRefHour.Text),
-            //Convert.ToUInt16(txtRefMinute.Text),
-            //Convert.ToUInt16(txtRefSecond.Text),
-            //Convert.ToUInt16(txtRefFrame.Text));
-
             lblRefFrame.Text =
                 $"Frame {videoTimerFrame.ConvertVideoTimeToFrameCount(referenceTimeToken)}";
+            lblSuggestion.Text = "";
+            lblResultFrames.Text = "0 Frame(s)";
+            lblResultTime.Text = "0:00:00.00";
             //there doesn't need to be a private instantation of a VideoTimer struct instance,
             //can create it here and plug it into the class from the variables
 
@@ -92,13 +59,13 @@ namespace SyncFrameTool_NET
                 videoTimerFrame.
                     ConvertFrameCountToVideoTime(Math.Abs(adjustmentFrames));
 
-            lblResultFrames.Text = $"{adjustmentFrames} Frames(s)";
+            lblResultFrames.Text = $"{adjustmentFrames} Frame(s)";
             lblResultTime.Text = adjustmentTimer.ToString();
 
             if (adjustmentFrames < 0)
-                lblSuggestion.Text = "";
+                lblSuggestion.Text = "Move the clip to the right.";
             else if (adjustmentFrames > 0)
-                lblSuggestion.Text = "";
+                lblSuggestion.Text = "Move the clip to the left.";
             else
                 lblSuggestion.Text = "The clip stays where it is.";
         }
@@ -138,14 +105,14 @@ namespace SyncFrameTool_NET
                 if (Validator.IsWithinRange(txtTime, 0, range))
                 {
                     AdjustCorrectTime(ref token, Convert.ToUInt16(txtTime.Text), time);
-                    errorMessage.Text = "Correct";
+                    errorMessage.Text = "";
                     timeError = false;
                 }
                 else
                 {
                     txtTime.Text = (range - 1).ToString();
                     AdjustCorrectTime(ref token, Convert.ToUInt16(txtTime.Text), time);
-                    errorMessage.Text = $"{txtTime.Tag} is not in range. Adjusted to preset range";
+                    errorMessage.Text = $"{txtTime.Tag} was not in range. Adjusted to preset range";
                     timeError = false;
                 }
 
@@ -211,6 +178,7 @@ namespace SyncFrameTool_NET
                 {
                     refFrameRate = (ushort)(videoTimerFrame.FPS - 1);
                     txtRefFrame.Text = refFrameRate.ToString();
+                    btnSetReferenceTime.PerformClick();
                 }
             }
 
