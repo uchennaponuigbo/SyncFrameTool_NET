@@ -33,6 +33,10 @@
             label2 = new Label();
             lblReferenceTime = new Label();
             groupBox1 = new GroupBox();
+            btnEndClearTimes = new Button();
+            lblEndFrame = new Label();
+            maskEndTime = new MaskedTextBox();
+            lblEndTime = new Label();
             label7 = new Label();
             label6 = new Label();
             label5 = new Label();
@@ -41,11 +45,12 @@
             txtEndFrame = new TextBox();
             txtEndMinute = new TextBox();
             txtEndHour = new TextBox();
-            btnSetReferenceTime = new Button();
             lblRefErrorMessage = new Label();
             lblResultTime = new Label();
             lblResultFrames = new Label();
             groupBox2 = new GroupBox();
+            btnRefClearTime = new Button();
+            maskRefTime = new MaskedTextBox();
             lblRefFrame = new Label();
             label8 = new Label();
             label9 = new Label();
@@ -56,10 +61,11 @@
             txtRefMinute = new TextBox();
             txtRefHour = new TextBox();
             groupBox3 = new GroupBox();
+            lblSuggestion = new Label();
             label3 = new Label();
             label13 = new Label();
-            lblSuggestion = new Label();
             lblEndErrorMessage = new Label();
+            btnClearAll = new Button();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -100,15 +106,19 @@
             // lblReferenceTime
             // 
             lblReferenceTime.AutoSize = true;
-            lblReferenceTime.Font = new Font("Segoe UI", 19.8000011F, FontStyle.Regular, GraphicsUnit.Point);
-            lblReferenceTime.Location = new Point(63, 115);
+            lblReferenceTime.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point);
+            lblReferenceTime.Location = new Point(73, 115);
             lblReferenceTime.Name = "lblReferenceTime";
-            lblReferenceTime.Size = new Size(167, 46);
+            lblReferenceTime.Size = new Size(151, 41);
             lblReferenceTime.TabIndex = 7;
-            lblReferenceTime.Text = "0:00:00.00";
+            lblReferenceTime.Text = "0:00:00:00";
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(btnEndClearTimes);
+            groupBox1.Controls.Add(lblEndFrame);
+            groupBox1.Controls.Add(maskEndTime);
+            groupBox1.Controls.Add(lblEndTime);
             groupBox1.Controls.Add(label7);
             groupBox1.Controls.Add(label6);
             groupBox1.Controls.Add(label5);
@@ -118,12 +128,53 @@
             groupBox1.Controls.Add(txtEndMinute);
             groupBox1.Controls.Add(txtEndHour);
             groupBox1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            groupBox1.Location = new Point(371, 63);
+            groupBox1.Location = new Point(371, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(249, 127);
+            groupBox1.Size = new Size(249, 280);
             groupBox1.TabIndex = 8;
             groupBox1.TabStop = false;
-            groupBox1.Text = "End Time";
+            groupBox1.Text = "Offset Time Frame";
+            // 
+            // btnEndClearTimes
+            // 
+            btnEndClearTimes.Location = new Point(7, 121);
+            btnEndClearTimes.Name = "btnEndClearTimes";
+            btnEndClearTimes.Size = new Size(63, 35);
+            btnEndClearTimes.TabIndex = 21;
+            btnEndClearTimes.Text = "Clear";
+            btnEndClearTimes.UseVisualStyleBackColor = true;
+            btnEndClearTimes.Click += btnEndClearTimes_Click;
+            // 
+            // lblEndFrame
+            // 
+            lblEndFrame.AutoSize = true;
+            lblEndFrame.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point);
+            lblEndFrame.Location = new Point(24, 220);
+            lblEndFrame.Name = "lblEndFrame";
+            lblEndFrame.Size = new Size(117, 38);
+            lblEndFrame.TabIndex = 20;
+            lblEndFrame.Text = "Frame 0";
+            // 
+            // maskEndTime
+            // 
+            maskEndTime.Font = new Font("Segoe UI", 19.2F, FontStyle.Regular, GraphicsUnit.Point);
+            maskEndTime.Location = new Point(37, 165);
+            maskEndTime.Mask = "00:00:00:00";
+            maskEndTime.Name = "maskEndTime";
+            maskEndTime.Size = new Size(167, 50);
+            maskEndTime.TabIndex = 19;
+            maskEndTime.TextAlign = HorizontalAlignment.Center;
+            maskEndTime.TextChanged += maskEndTime_TextChanged;
+            // 
+            // lblEndTime
+            // 
+            lblEndTime.AutoSize = true;
+            lblEndTime.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point);
+            lblEndTime.Location = new Point(73, 115);
+            lblEndTime.Name = "lblEndTime";
+            lblEndTime.Size = new Size(151, 41);
+            lblEndTime.TabIndex = 18;
+            lblEndTime.Text = "0:00:00:00";
             // 
             // label7
             // 
@@ -208,7 +259,7 @@
             // 
             txtEndHour.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point);
             txtEndHour.Location = new Point(7, 69);
-            txtEndHour.MaxLength = 1;
+            txtEndHour.MaxLength = 2;
             txtEndHour.Name = "txtEndHour";
             txtEndHour.Size = new Size(53, 43);
             txtEndHour.TabIndex = 1;
@@ -217,22 +268,12 @@
             txtEndHour.TextAlign = HorizontalAlignment.Center;
             txtEndHour.TextChanged += txtEndHour_TextChanged;
             // 
-            // btnSetReferenceTime
-            // 
-            btnSetReferenceTime.Location = new Point(7, 125);
-            btnSetReferenceTime.Name = "btnSetReferenceTime";
-            btnSetReferenceTime.Size = new Size(53, 29);
-            btnSetReferenceTime.TabIndex = 9;
-            btnSetReferenceTime.Text = "Set";
-            btnSetReferenceTime.UseVisualStyleBackColor = true;
-            btnSetReferenceTime.Click += btnSetReferenceTime_Click;
-            // 
             // lblRefErrorMessage
             // 
             lblRefErrorMessage.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
-            lblRefErrorMessage.Location = new Point(72, 252);
+            lblRefErrorMessage.Location = new Point(72, 295);
             lblRefErrorMessage.Name = "lblRefErrorMessage";
-            lblRefErrorMessage.Size = new Size(249, 69);
+            lblRefErrorMessage.Size = new Size(274, 78);
             lblRefErrorMessage.TabIndex = 10;
             lblRefErrorMessage.Text = "ErrorMessageHere";
             // 
@@ -244,7 +285,7 @@
             lblResultTime.Name = "lblResultTime";
             lblResultTime.Size = new Size(186, 50);
             lblResultTime.TabIndex = 12;
-            lblResultTime.Text = "0:00:00.00";
+            lblResultTime.Text = "0:00:00:00";
             // 
             // lblResultFrames
             // 
@@ -253,16 +294,17 @@
             lblResultFrames.Name = "lblResultFrames";
             lblResultFrames.Size = new Size(193, 64);
             lblResultFrames.TabIndex = 13;
-            lblResultFrames.Text = "0 Frame(s)";
+            lblResultFrames.Text = "0 Frames";
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(btnRefClearTime);
+            groupBox2.Controls.Add(maskRefTime);
             groupBox2.Controls.Add(lblRefFrame);
             groupBox2.Controls.Add(label8);
             groupBox2.Controls.Add(label9);
             groupBox2.Controls.Add(label10);
             groupBox2.Controls.Add(label11);
-            groupBox2.Controls.Add(btnSetReferenceTime);
             groupBox2.Controls.Add(txtRefSecond);
             groupBox2.Controls.Add(txtRefFrame);
             groupBox2.Controls.Add(lblReferenceTime);
@@ -271,18 +313,39 @@
             groupBox2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
             groupBox2.Location = new Point(72, 12);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(249, 212);
+            groupBox2.Size = new Size(249, 280);
             groupBox2.TabIndex = 17;
             groupBox2.TabStop = false;
-            groupBox2.Text = "Reference Time (Starting Time)";
+            groupBox2.Text = "Reference Time Frame";
+            // 
+            // btnRefClearTime
+            // 
+            btnRefClearTime.Location = new Point(6, 121);
+            btnRefClearTime.Name = "btnRefClearTime";
+            btnRefClearTime.Size = new Size(63, 35);
+            btnRefClearTime.TabIndex = 24;
+            btnRefClearTime.Text = "Clear";
+            btnRefClearTime.UseVisualStyleBackColor = true;
+            btnRefClearTime.Click += btnSetClearTime_Click;
+            // 
+            // maskRefTime
+            // 
+            maskRefTime.Font = new Font("Segoe UI", 19.2F, FontStyle.Regular, GraphicsUnit.Point);
+            maskRefTime.Location = new Point(45, 165);
+            maskRefTime.Mask = "00:00:00:00";
+            maskRefTime.Name = "maskRefTime";
+            maskRefTime.Size = new Size(167, 50);
+            maskRefTime.TabIndex = 23;
+            maskRefTime.TextAlign = HorizontalAlignment.Center;
+            maskRefTime.TextChanged += maskRefTime_TextChanged;
             // 
             // lblRefFrame
             // 
             lblRefFrame.AutoSize = true;
-            lblRefFrame.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point);
-            lblRefFrame.Location = new Point(56, 165);
+            lblRefFrame.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point);
+            lblRefFrame.Location = new Point(21, 220);
             lblRefFrame.Name = "lblRefFrame";
-            lblRefFrame.Size = new Size(124, 41);
+            lblRefFrame.Size = new Size(117, 38);
             lblRefFrame.TabIndex = 17;
             lblRefFrame.Text = "Frame 0";
             // 
@@ -369,7 +432,7 @@
             // 
             txtRefHour.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point);
             txtRefHour.Location = new Point(7, 69);
-            txtRefHour.MaxLength = 1;
+            txtRefHour.MaxLength = 2;
             txtRefHour.Name = "txtRefHour";
             txtRefHour.Size = new Size(53, 43);
             txtRefHour.TabIndex = 1;
@@ -382,12 +445,22 @@
             // 
             groupBox3.Controls.Add(lblResultFrames);
             groupBox3.Controls.Add(lblResultTime);
-            groupBox3.Location = new Point(671, 102);
+            groupBox3.Controls.Add(lblSuggestion);
+            groupBox3.Location = new Point(663, 102);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(217, 137);
+            groupBox3.Size = new Size(225, 219);
             groupBox3.TabIndex = 18;
             groupBox3.TabStop = false;
             groupBox3.Text = "Adjustment Time";
+            // 
+            // lblSuggestion
+            // 
+            lblSuggestion.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
+            lblSuggestion.Location = new Point(6, 134);
+            lblSuggestion.Name = "lblSuggestion";
+            lblSuggestion.Size = new Size(215, 82);
+            lblSuggestion.TabIndex = 21;
+            lblSuggestion.Text = "Adjust the clip to the right/left. It is ahead/behind the target.";
             // 
             // label3
             // 
@@ -409,31 +482,32 @@
             label13.Text = "=";
             label13.TextAlign = ContentAlignment.TopCenter;
             // 
-            // lblSuggestion
-            // 
-            lblSuggestion.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
-            lblSuggestion.Location = new Point(671, 252);
-            lblSuggestion.Name = "lblSuggestion";
-            lblSuggestion.Size = new Size(215, 56);
-            lblSuggestion.TabIndex = 21;
-            lblSuggestion.Text = "Adjust the clip to the right/left";
-            // 
             // lblEndErrorMessage
             // 
             lblEndErrorMessage.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
-            lblEndErrorMessage.Location = new Point(371, 252);
+            lblEndErrorMessage.Location = new Point(371, 295);
             lblEndErrorMessage.Name = "lblEndErrorMessage";
-            lblEndErrorMessage.Size = new Size(249, 69);
+            lblEndErrorMessage.Size = new Size(273, 78);
             lblEndErrorMessage.TabIndex = 22;
             lblEndErrorMessage.Text = "ErrorMessageHere";
+            // 
+            // btnClearAll
+            // 
+            btnClearAll.Location = new Point(790, 52);
+            btnClearAll.Name = "btnClearAll";
+            btnClearAll.Size = new Size(94, 35);
+            btnClearAll.TabIndex = 23;
+            btnClearAll.Text = "Clear All";
+            btnClearAll.UseVisualStyleBackColor = true;
+            btnClearAll.Click += btnClearAll_Click;
             // 
             // formSyncFrameTool
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(898, 343);
+            ClientSize = new Size(898, 382);
+            Controls.Add(btnClearAll);
             Controls.Add(lblEndErrorMessage);
-            Controls.Add(lblSuggestion);
             Controls.Add(label13);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
@@ -446,7 +520,7 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "formSyncFrameTool";
-            Text = "Sync Video Frame";
+            Text = "Sync Video Clip";
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             groupBox2.ResumeLayout(false);
@@ -463,7 +537,6 @@
         private Label label2;
         private Label lblReferenceTime;
         private GroupBox groupBox1;
-        private Button btnSetReferenceTime;
         private TextBox txtEndHour;
         private TextBox txtEndSecond;
         private TextBox txtEndMinute;
@@ -490,5 +563,12 @@
         private Label label13;
         private Label lblSuggestion;
         private Label lblEndErrorMessage;
+        private Label lblEndTime;
+        private MaskedTextBox maskEndTime;
+        private Label lblEndFrame;
+        private Button btnEndClearTimes;
+        private MaskedTextBox maskRefTime;
+        private Button btnRefClearTime;
+        private Button btnClearAll;
     }
 }

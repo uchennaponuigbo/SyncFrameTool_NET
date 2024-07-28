@@ -13,16 +13,18 @@ namespace SyncFrameTool_NET
             frames = f;
         }
 
+        public void SetToZero() => hours = minutes = seconds = frames = 0;
+
         /// <summary>
-        /// 0:00:00.00
-        /// H:MM:SS.FF
-        /// Hours:Minutes:Seconds.Frames
+        /// 0:00:00:00
+        /// H:MM:SS:FF
+        /// Hours:Minutes:Seconds:Frames
         /// </summary>
         public override string ToString()
         {
             return $"{hours}:" +
                 $"{(minutes < 10 ? "0" + minutes : minutes)}:" +
-                $"{(seconds < 10 ? "0" + seconds : seconds)}." +
+                $"{(seconds < 10 ? "0" + seconds : seconds)}:" +
                 $"{(frames < 10 ? "0" + frames : frames)}";
         }
     }
@@ -38,35 +40,34 @@ namespace SyncFrameTool_NET
 
         public int ConvertVideoTimeToFrameCount(VideoTimer timer)
         {
-            int frameCount = 0;
-            frameCount += (timer.hours * 3600 * FPS) + (timer.minutes * 60 * FPS)
+            return (timer.hours * 3600 * FPS) + (timer.minutes * 60 * FPS)
                         + (timer.seconds * FPS) + timer.frames;
-            return frameCount;
         }
 
         public VideoTimer ConvertFrameCountToVideoTime(int frameCount)
         {
-            ushort seconds = (ushort)(frameCount / FPS);
-            ushort frames = (ushort)(frameCount % FPS);
-            ushort minutes = 0;
-            ushort hours = 0;
+            frameCount = Math.Abs(frameCount);
 
+            VideoTimer time = new VideoTimer();
+            uint seconds = (uint)(frameCount / FPS); //uint because possible overflow as ushort
+            time.frames = (ushort)(frameCount % FPS);
+          
             if (seconds >= 60)
             {
-                minutes = (ushort)(seconds / 60);
-                seconds -= (ushort)(minutes * 60);
+                time.minutes = (ushort)(seconds / 60);
+                seconds -= (ushort)(time.minutes * 60);
             }
 
-            if (minutes >= 60)
+            if (time.minutes >= 60)
             {
-                hours = (ushort)(minutes / 60);
-                minutes -= (ushort)(hours * 60);
+                time.hours = (ushort)(time.minutes / 60);
+                time.minutes -= (ushort)(time.hours * 60);
             }
-
-            return new VideoTimer(hours, minutes, seconds, frames);
+            time.seconds = (ushort)seconds;
+            return time;
         }
         
-        public int FrameOffset(VideoTimer refTime, VideoTimer endTime)
+        public int DeltaFrameOffset(VideoTimer refTime, VideoTimer endTime)
         {
             int start = ConvertVideoTimeToFrameCount(refTime);
             int end = ConvertVideoTimeToFrameCount(endTime);

@@ -1,0 +1,37 @@
+﻿//private void ParseTimeIntoTextBoxes(TextBox txtTime, ref TextBox txtHour,
+        //    ref TextBox txtMinute, ref TextBox txtSecond, ref TextBox txtFrame)
+        //{
+        //    string[] times = txtTime.Text.Split(':');
+        //    if (times.Length == 0)
+        //        return;
+
+        //    //need to do test inputs to help write this 
+        //    //00:00:00:00
+        //    //:6:5:12
+        //    //0:::
+        //    //4:::6
+        //    //00::5:3
+        //    //adklaeob
+        //    //1
+        //    //::::
+        //    //:
+        //    //4:56:27
+        //    //0:13:59:23
+        //}
+
+        //TODO: Using both the individual Text box fields and the masked textbox
+        //will display incorrect frame count values
+
+        //idea 1, setting the internal values to 0.
+        //bad because the display values will but outdated
+
+        //idea 2, disable opposing fields if one is edited. e.g. if using masked textbox, disable
+        //indididual textboxes and vice versa
+
+        //result... will be on another day
+        //idea 3, use a textbox and allow only pasting in. no manual typing
+        //https://stackoverflow.com/questions/39045051/let-user-copy-and-paste-text-in-text-box-but-disable-manual-editing-in-c-sharp
+
+        //idea 4, which worked, is to REMEMBER THAT THERE ARE TWO EMPTY SPACES WITHIN THE STRING AND NOT ONE
+
+
