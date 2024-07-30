@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(formSyncFrameTool));
             btnCalculate = new Button();
             cboFrameRate = new ComboBox();
             label2 = new Label();
@@ -518,6 +519,7 @@
             Controls.Add(cboFrameRate);
             Controls.Add(btnCalculate);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "formSyncFrameTool";
             Text = "Sync Video Clip";
