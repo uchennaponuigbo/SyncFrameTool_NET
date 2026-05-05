@@ -67,9 +67,26 @@
             label13 = new Label();
             lblEndErrorMessage = new Label();
             btnClearAll = new Button();
+            btnModulus = new Button();
+            txtClipLengthInFrames = new TextBox();
+            label4 = new Label();
+            label12 = new Label();
+            txtNumOfClips = new TextBox();
+            label14 = new Label();
+            label15 = new Label();
+            lblQuotientFrames = new Label();
+            lblReminder = new Label();
+            richTextBox1 = new RichTextBox();
+            listHistory = new ListBox();
+            label17 = new Label();
+            groupBox4 = new GroupBox();
+            btnClearHistory = new Button();
+            label18 = new Label();
+            label16 = new Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
+            groupBox4.SuspendLayout();
             SuspendLayout();
             // 
             // btnCalculate
@@ -276,7 +293,6 @@
             lblRefErrorMessage.Name = "lblRefErrorMessage";
             lblRefErrorMessage.Size = new Size(274, 78);
             lblRefErrorMessage.TabIndex = 10;
-            lblRefErrorMessage.Text = "ErrorMessageHere";
             // 
             // lblResultTime
             // 
@@ -490,7 +506,6 @@
             lblEndErrorMessage.Name = "lblEndErrorMessage";
             lblEndErrorMessage.Size = new Size(273, 78);
             lblEndErrorMessage.TabIndex = 22;
-            lblEndErrorMessage.Text = "ErrorMessageHere";
             // 
             // btnClearAll
             // 
@@ -502,11 +517,185 @@
             btnClearAll.UseVisualStyleBackColor = true;
             btnClearAll.Click += btnClearAll_Click;
             // 
+            // btnModulus
+            // 
+            btnModulus.Location = new Point(16, 455);
+            btnModulus.Name = "btnModulus";
+            btnModulus.Size = new Size(136, 60);
+            btnModulus.TabIndex = 24;
+            btnModulus.Text = "Calculate Equal Clip Distribution";
+            btnModulus.UseVisualStyleBackColor = true;
+            btnModulus.Click += btnModulus_Click;
+            // 
+            // txtClipLengthInFrames
+            // 
+            txtClipLengthInFrames.Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point);
+            txtClipLengthInFrames.Location = new Point(160, 17);
+            txtClipLengthInFrames.MaxLength = 7;
+            txtClipLengthInFrames.Name = "txtClipLengthInFrames";
+            txtClipLengthInFrames.Size = new Size(105, 38);
+            txtClipLengthInFrames.TabIndex = 25;
+            txtClipLengthInFrames.TextAlign = HorizontalAlignment.Center;
+            txtClipLengthInFrames.TextChanged += txtClipLengthInFrames_TextChanged;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
+            label4.Location = new Point(9, 93);
+            label4.Name = "label4";
+            label4.Size = new Size(131, 23);
+            label4.TabIndex = 26;
+            label4.Text = "Number of clips";
+            // 
+            // label12
+            // 
+            label12.Font = new Font("Segoe UI", 19.8000011F, FontStyle.Regular, GraphicsUnit.Point);
+            label12.Location = new Point(147, 27);
+            label12.Name = "label12";
+            label12.Size = new Size(134, 50);
+            label12.TabIndex = 27;
+            label12.Text = "_______";
+            label12.TextAlign = ContentAlignment.TopCenter;
+            // 
+            // txtNumOfClips
+            // 
+            txtNumOfClips.Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point);
+            txtNumOfClips.Location = new Point(176, 80);
+            txtNumOfClips.MaxLength = 3;
+            txtNumOfClips.Name = "txtNumOfClips";
+            txtNumOfClips.Size = new Size(73, 38);
+            txtNumOfClips.TabIndex = 28;
+            txtNumOfClips.TextAlign = HorizontalAlignment.Center;
+            txtNumOfClips.TextChanged += txtNumOfClips_TextChanged;
+            // 
+            // label14
+            // 
+            label14.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
+            label14.Location = new Point(6, 21);
+            label14.Name = "label14";
+            label14.Size = new Size(148, 55);
+            label14.TabIndex = 29;
+            label14.Text = "Section Length in Frames";
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
+            label15.Location = new Point(189, 440);
+            label15.Name = "label15";
+            label15.Size = new Size(137, 23);
+            label15.TabIndex = 32;
+            label15.Text = "Quotient Frames";
+            // 
+            // lblQuotientFrames
+            // 
+            lblQuotientFrames.AutoSize = true;
+            lblQuotientFrames.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point);
+            lblQuotientFrames.Location = new Point(207, 470);
+            lblQuotientFrames.Name = "lblQuotientFrames";
+            lblQuotientFrames.Size = new Size(34, 41);
+            lblQuotientFrames.TabIndex = 34;
+            lblQuotientFrames.Text = "0";
+            // 
+            // lblReminder
+            // 
+            lblReminder.AutoSize = true;
+            lblReminder.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point);
+            lblReminder.Location = new Point(378, 468);
+            lblReminder.Name = "lblReminder";
+            lblReminder.Size = new Size(34, 41);
+            lblReminder.TabIndex = 35;
+            lblReminder.Text = "0";
+            // 
+            // richTextBox1
+            // 
+            richTextBox1.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
+            richTextBox1.Location = new Point(367, 303);
+            richTextBox1.MaxLength = 8192;
+            richTextBox1.Name = "richTextBox1";
+            richTextBox1.Size = new Size(244, 135);
+            richTextBox1.TabIndex = 36;
+            richTextBox1.Text = "";
+            // 
+            // listHistory
+            // 
+            listHistory.FormattingEnabled = true;
+            listHistory.ItemHeight = 20;
+            listHistory.Location = new Point(617, 327);
+            listHistory.Name = "listHistory";
+            listHistory.Size = new Size(271, 204);
+            listHistory.TabIndex = 38;
+            listHistory.SelectedIndexChanged += listHistory_SelectedIndexChanged;
+            // 
+            // label17
+            // 
+            label17.Font = new Font("Segoe UI", 24F, FontStyle.Regular, GraphicsUnit.Point);
+            label17.Location = new Point(158, 464);
+            label17.Name = "label17";
+            label17.Size = new Size(43, 45);
+            label17.TabIndex = 39;
+            label17.Text = "=";
+            label17.TextAlign = ContentAlignment.TopCenter;
+            // 
+            // groupBox4
+            // 
+            groupBox4.Controls.Add(label14);
+            groupBox4.Controls.Add(txtClipLengthInFrames);
+            groupBox4.Controls.Add(label12);
+            groupBox4.Controls.Add(txtNumOfClips);
+            groupBox4.Controls.Add(label4);
+            groupBox4.Location = new Point(12, 295);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new Size(284, 138);
+            groupBox4.TabIndex = 40;
+            groupBox4.TabStop = false;
+            // 
+            // btnClearHistory
+            // 
+            btnClearHistory.Location = new Point(517, 477);
+            btnClearHistory.Name = "btnClearHistory";
+            btnClearHistory.Size = new Size(94, 49);
+            btnClearHistory.TabIndex = 41;
+            btnClearHistory.Text = "Clear History";
+            btnClearHistory.UseVisualStyleBackColor = true;
+            btnClearHistory.Click += btnClearHistory_Click;
+            // 
+            // label18
+            // 
+            label18.AutoSize = true;
+            label18.Location = new Point(317, 303);
+            label18.Name = "label18";
+            label18.Size = new Size(48, 20);
+            label18.TabIndex = 42;
+            label18.Text = "Notes";
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
+            label16.Location = new Point(378, 440);
+            label16.Name = "label16";
+            label16.Size = new Size(151, 23);
+            label16.TabIndex = 33;
+            label16.Text = "Remainder Frames";
+            // 
             // formSyncFrameTool
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(898, 382);
+            ClientSize = new Size(898, 540);
+            Controls.Add(label16);
+            Controls.Add(lblQuotientFrames);
+            Controls.Add(label15);
+            Controls.Add(label18);
+            Controls.Add(btnClearHistory);
+            Controls.Add(groupBox4);
+            Controls.Add(label17);
+            Controls.Add(listHistory);
+            Controls.Add(richTextBox1);
+            Controls.Add(lblReminder);
+            Controls.Add(btnModulus);
             Controls.Add(btnClearAll);
             Controls.Add(lblEndErrorMessage);
             Controls.Add(label13);
@@ -529,6 +718,8 @@
             groupBox2.PerformLayout();
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
+            groupBox4.ResumeLayout(false);
+            groupBox4.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -572,5 +763,21 @@
         private MaskedTextBox maskRefTime;
         private Button btnRefClearTime;
         private Button btnClearAll;
+        private Button btnModulus;
+        private TextBox txtClipLengthInFrames;
+        private Label label4;
+        private Label label12;
+        private TextBox txtNumOfClips;
+        private Label label14;
+        private Label label15;
+        private Label lblQuotientFrames;
+        private Label lblReminder;
+        private RichTextBox richTextBox1;
+        private ListBox listHistory;
+        private Label label17;
+        private GroupBox groupBox4;
+        private Button btnClearHistory;
+        private Label label18;
+        private Label label16;
     }
 }

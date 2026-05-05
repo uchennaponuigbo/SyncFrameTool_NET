@@ -35,3 +35,7 @@
         //idea 4, which worked, is to REMEMBER THAT THERE ARE TWO EMPTY SPACES WITHIN THE STRING AND NOT ONE
 
 
+        https://github.com/dotnet/winforms/blob/main/docs/designer/designer-high-dpi-mode.md
+
+            <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
+    <ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>

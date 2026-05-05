@@ -6,17 +6,24 @@ namespace SyncFrameTool_NET
     {
         private static bool CheckRangeMinInclusive(ushort number, ushort min, ushort max) 
             => number >= min && number < max;
-        
+
+        private static bool CheckIfInteger(string text)
+            => ushort.TryParse(text, out _);
+
+        private static bool CheckIfUInteger(string text)
+            => uint.TryParse(text, out _);
+
         public static bool IsWithinRange(TextBox textBox, ushort min = 0, ushort max = 59)
            => CheckRangeMinInclusive(Convert.ToUInt16(textBox.Text), min, max);
 
         public static bool IsWithinRange(string text, ushort min = 0, ushort max = 59)
             => CheckRangeMinInclusive(Convert.ToUInt16(text), min, max);
 
-        private static bool CheckIfInteger(string text) 
-            => ushort.TryParse(text, out _);
         public static bool IsInteger(TextBox textBox)
             => CheckIfInteger(textBox.Text);
+
+        public static bool IsUInteger(TextBox textBox)
+            => CheckIfUInteger(textBox.Text);
         
         public static bool IsInteger(string text) 
             => CheckIfInteger(text);

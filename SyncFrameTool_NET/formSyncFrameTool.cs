@@ -1,10 +1,11 @@
 using System.Text;
+using System.Windows.Forms;
 
 namespace SyncFrameTool_NET
 {
     public partial class formSyncFrameTool : Form
     {
-        private ManageVideoTimerFrame videoTimerFrame;
+        private readonly ManageVideoTimerFrame videoTimerFrame;
         private VideoTimer referenceTimeToken;
         private VideoTimer endTimeToken;
         //bool[] timeEndErrors;
@@ -34,11 +35,14 @@ namespace SyncFrameTool_NET
             cboFrameRate.SelectedIndexChanged -= cboFrameRate_SelectedIndexChanged;
             cboFrameRate.SelectedIndex = 2;
 
-            videoTimerFrame = new ManageVideoTimerFrame((Convert.ToUInt16(cboFrameRate.SelectedItem)));
+            videoTimerFrame = new ManageVideoTimerFrame(Convert.ToUInt16(cboFrameRate.SelectedItem));
+            //lblFrameRate.Text = videoTimerFrame.FPS.ToString();
 
             cboFrameRate.SelectedIndexChanged += cboFrameRate_SelectedIndexChanged;
 
             lblRefErrorMessage.Text = lblEndErrorMessage.Text = lblSuggestion.Text = "";
+
+            btnModulus.Enabled = false;
         }
 
         //TODO: Calculations break after the offset in hours are really large.
@@ -61,6 +65,7 @@ namespace SyncFrameTool_NET
         //this problem only began to happen because I increased the hour value limit.
         private void btnCalculate_Click(object sender, EventArgs e)
         {
+            string sign = "+/-";
             int adjustmentFrames = videoTimerFrame.DeltaFrameOffset(referenceTimeToken, endTimeToken);
             VideoTimer adjustmentTimer =
                 videoTimerFrame.ConvertFrameCountToVideoTime(adjustmentFrames);
@@ -71,11 +76,26 @@ namespace SyncFrameTool_NET
             lblResultTime.Text = adjustmentTimer.ToString();
 
             if (adjustmentFrames < 0)
+            {
                 lblSuggestion.Text = "Move the clip to the right. It is behind the target.";
+                sign = "-";
+            }
             else if (adjustmentFrames > 0)
+            {
                 lblSuggestion.Text = "Move the clip to the left. It is ahead of the target.";
+                sign = "+";
+            }
             else
+            {
                 lblSuggestion.Text = "The clip stays where it is.";
+                sign = "";
+            }
+
+
+            listHistory.Items.Add($"{lblReferenceTime.Text} - {lblEndTime.Text} = {sign}{lblResultTime.Text}");
+
+            int items = listHistory.Height / listHistory.ItemHeight;
+            listHistory.TopIndex = listHistory.Items.Count - items;
         }
 
         private void AdjustCorrectTime(ref VideoTimer token, ushort timeValue, CheckTime time)
@@ -164,14 +184,14 @@ namespace SyncFrameTool_NET
         //displayRefErrors = displayEndErrors = new DisplayTimeError()
         //DO NOT DO THIS. THE POINTERS GO TO THE SAME MEMORY ADDRESS
         private void CheckTimeTextBoxes(ref TextBox txtTime, int index, ref DisplayTimeError display,
-            ref VideoTimer token, ref Label errorMessage,
+            ref VideoTimer token, /*ref Label errorMessage,*/
             CheckTime time, ushort range)
         {
             if (Validator.IsEmpty(txtTime))
             {
                 AdjustCorrectTime(ref token, 0, time);
                 display.SetMessages(index, false, "");
-                errorMessage.Text = display.ToString();
+                //errorMessage.Text = display.ToString();
                 return;
             }
 
@@ -181,33 +201,35 @@ namespace SyncFrameTool_NET
                 {
                     AdjustCorrectTime(ref token, Convert.ToUInt16(txtTime.Text), time);
                     display.SetMessages(index, false, "");
-                    errorMessage.Text = display.ToString();
+                    //errorMessage.Text = display.ToString();
                 }
                 else
                 {
                     txtTime.Text = (range - 1).ToString();
                     AdjustCorrectTime(ref token, Convert.ToUInt16(txtTime.Text), time);
                     display.SetMessages(index, false, $"Adjusted {txtTime.Tag} to preset range.");
-                    errorMessage.Text = display.ToString();
+                    //errorMessage.Text = display.ToString();
                 }
 
             }
             else
             {
                 display.SetMessages(index, true, $"{txtTime.Tag} is NaN.");
-                errorMessage.Text = display.ToString();
+                //errorMessage.Text = display.ToString();
                 return;
             }
         }
 
         private void CheckForInputErrors(ref DisplayTimeError display, ref Label lblTime,
-            ref VideoTimer token, ref Label lblFrameCount)
+            ref VideoTimer token, ref Label lblFrameCount, ref TextBox txtTime)
         {
             if (display.AreThereInputErrors())
             {
                 btnCalculate.Enabled = false;
+                txtTime.ForeColor = Color.Red;
                 return;
             }
+            txtTime.ForeColor = Color.Black;
             btnCalculate.Enabled = true;
             DisplayTimeInfo(ref lblTime, token, ref lblFrameCount);
         }
@@ -226,9 +248,9 @@ namespace SyncFrameTool_NET
             //CheckForInputErrors(ref timeEndErrors,
             //    ref lblEndTime, ref endTimeToken, ref lblEndFrame);
             CheckTimeTextBoxes(ref txtEndHour, 0, ref displayEndErrors,
-                ref endTimeToken, ref lblEndErrorMessage, CheckTime.Hour, HourLimit);
+                ref endTimeToken, /*ref lblEndErrorMessage,*/ CheckTime.Hour, HourLimit);
             CheckForInputErrors(ref displayEndErrors, ref lblEndTime,
-                ref endTimeToken, ref lblEndFrame);
+                ref endTimeToken, ref lblEndFrame, ref txtEndHour);
         }
 
         private void txtEndMinute_TextChanged(object sender, EventArgs e)
@@ -239,9 +261,9 @@ namespace SyncFrameTool_NET
             //    ref lblEndTime, ref endTimeToken, ref lblEndFrame);
 
             CheckTimeTextBoxes(ref txtEndMinute, 1, ref displayEndErrors,
-                ref endTimeToken, ref lblEndErrorMessage, CheckTime.Minute, 60);
+                ref endTimeToken, /*ref lblEndErrorMessage,*/ CheckTime.Minute, 60);
             CheckForInputErrors(ref displayEndErrors, ref lblEndTime,
-                ref endTimeToken, ref lblEndFrame);
+                ref endTimeToken, ref lblEndFrame, ref txtEndMinute);
         }
 
         private void txtEndSecond_TextChanged(object sender, EventArgs e)
@@ -251,9 +273,9 @@ namespace SyncFrameTool_NET
             //CheckForInputErrors(ref timeEndErrors,
             //    ref lblEndTime, ref endTimeToken, ref lblEndFrame);
             CheckTimeTextBoxes(ref txtEndSecond, 2, ref displayEndErrors,
-                ref endTimeToken, ref lblEndErrorMessage, CheckTime.Second, 60);
+                ref endTimeToken, /*ref lblEndErrorMessage,*/ CheckTime.Second, 60);
             CheckForInputErrors(ref displayEndErrors, ref lblEndTime,
-                ref endTimeToken, ref lblEndFrame);
+                ref endTimeToken, ref lblEndFrame, ref txtEndSecond);
         }
 
         private void txtEndFrame_TextChanged(object sender, EventArgs e)
@@ -263,14 +285,15 @@ namespace SyncFrameTool_NET
             //CheckForInputErrors(ref timeEndErrors,
             //    ref lblEndTime, ref endTimeToken, ref lblEndFrame);
             CheckTimeTextBoxes(ref txtEndFrame, 3, ref displayEndErrors,
-                ref endTimeToken, ref lblEndErrorMessage, CheckTime.Frame, videoTimerFrame.FPS);
+                ref endTimeToken, /*ref lblEndErrorMessage,*/ CheckTime.Frame, videoTimerFrame.FPS);
             CheckForInputErrors(ref displayEndErrors, ref lblEndTime,
-                ref endTimeToken, ref lblEndFrame);
+                ref endTimeToken, ref lblEndFrame, ref txtEndFrame);
         }
 
-        private void cboFrameRate_SelectedIndexChanged(object sender, EventArgs e)
+        private void cboFrameRate_SelectedIndexChanged(object? sender, EventArgs e)
         {
             videoTimerFrame.FPS = Convert.ToUInt16(cboFrameRate.SelectedItem.ToString());
+            //lblFrameRate.Text = videoTimerFrame.FPS.ToString();
 
             if (Validator.IsInteger(txtRefFrame.Text))
             {
@@ -311,9 +334,9 @@ namespace SyncFrameTool_NET
             //CheckForInputErrors(ref timeRefErrors,
             //    ref lblReferenceTime, ref referenceTimeToken, ref lblRefFrame);
             CheckTimeTextBoxes(ref txtRefHour, 0, ref displayRefErrors,
-                ref referenceTimeToken, ref lblRefErrorMessage, CheckTime.Hour, HourLimit);
+                ref referenceTimeToken, /*ref lblRefErrorMessage,*/ CheckTime.Hour, HourLimit);
             CheckForInputErrors(ref displayRefErrors, ref lblReferenceTime,
-                ref referenceTimeToken, ref lblRefFrame);
+                ref referenceTimeToken, ref lblRefFrame, ref txtRefHour);
         }
 
         private void txtRefMinute_TextChanged(object sender, EventArgs e)
@@ -323,9 +346,9 @@ namespace SyncFrameTool_NET
             //CheckForInputErrors(ref timeRefErrors,
             //    ref lblReferenceTime, ref referenceTimeToken, ref lblRefFrame);
             CheckTimeTextBoxes(ref txtRefMinute, 1, ref displayRefErrors,
-                ref referenceTimeToken, ref lblRefErrorMessage, CheckTime.Minute, 60);
+                ref referenceTimeToken, /*ref lblRefErrorMessage,*/ CheckTime.Minute, 60);
             CheckForInputErrors(ref displayRefErrors, ref lblReferenceTime,
-                ref referenceTimeToken, ref lblRefFrame);
+                ref referenceTimeToken, ref lblRefFrame, ref txtRefMinute);
         }
 
         private void txtRefSecond_TextChanged(object sender, EventArgs e)
@@ -335,9 +358,9 @@ namespace SyncFrameTool_NET
             //CheckForInputErrors(ref timeRefErrors,
             //    ref lblReferenceTime, ref referenceTimeToken, ref lblRefFrame);
             CheckTimeTextBoxes(ref txtRefSecond, 2, ref displayRefErrors,
-                ref referenceTimeToken, ref lblRefErrorMessage, CheckTime.Second, 60);
+                ref referenceTimeToken, /*ref lblRefErrorMessage,*/ CheckTime.Second, 60);
             CheckForInputErrors(ref displayRefErrors, ref lblReferenceTime,
-                ref referenceTimeToken, ref lblRefFrame);
+                ref referenceTimeToken, ref lblRefFrame, ref txtRefSecond);
         }
 
         private void txtRefFrame_TextChanged(object sender, EventArgs e)
@@ -347,9 +370,9 @@ namespace SyncFrameTool_NET
             //CheckForInputErrors(ref timeRefErrors,
             //    ref lblReferenceTime, ref referenceTimeToken, ref lblRefFrame);
             CheckTimeTextBoxes(ref txtRefFrame, 3, ref displayRefErrors,
-                ref referenceTimeToken, ref lblRefErrorMessage, CheckTime.Frame, videoTimerFrame.FPS);
+                ref referenceTimeToken, /*ref lblRefErrorMessage,*/ CheckTime.Frame, videoTimerFrame.FPS);
             CheckForInputErrors(ref displayRefErrors, ref lblReferenceTime,
-                ref referenceTimeToken, ref lblRefFrame);
+                ref referenceTimeToken, ref lblRefFrame, ref txtRefFrame);
         }
 
         private void ParseTimeIntoTextBoxes(MaskedTextBox maskTime, ref TextBox txtHour,
@@ -373,12 +396,12 @@ namespace SyncFrameTool_NET
             txtFrame.Text = times[3];
         }
 
-        private void maskEndTime_TextChanged(object sender, EventArgs e)
+        private void maskEndTime_TextChanged(object? sender, EventArgs e)
         {
             ParseTimeIntoTextBoxes(maskEndTime, ref txtEndHour, ref txtEndMinute,
                 ref txtEndSecond, ref txtEndFrame);
         }
-        private void maskRefTime_TextChanged(object sender, EventArgs e)
+        private void maskRefTime_TextChanged(object? sender, EventArgs e)
         {
             ParseTimeIntoTextBoxes(maskRefTime, ref txtRefHour, ref txtRefMinute,
                 ref txtRefSecond, ref txtRefFrame);
@@ -393,7 +416,8 @@ namespace SyncFrameTool_NET
 
             lblSuggestion.Text = "";
             lblResultFrames.Text = "0 Frames";
-            lblResultTime.Text = "0:00:00:00";
+            lblRefFrame.Text = lblEndFrame.Text = "Frame 0";
+            lblResultTime.Text = lblReferenceTime.Text = lblEndTime.Text = "0:00:00:00";
         }
 
         private void btnEndClearTimes_Click(object sender, EventArgs e)
@@ -417,6 +441,141 @@ namespace SyncFrameTool_NET
         {
             btnRefClearTime.PerformClick();
             btnEndClearTimes.PerformClick();
+
+            lblReminder.Text = lblQuotientFrames.Text = "0";
+            txtClipLengthInFrames.Text = txtNumOfClips.Text = "";
+        }
+
+        private void btnModulus_Click(object sender, EventArgs e)
+        {
+            uint clipLength = Convert.ToUInt32(txtClipLengthInFrames.Text);
+            ushort numOfClips = Convert.ToUInt16(txtNumOfClips.Text);
+            //5,183,999 = 23H, 59M, 59S, 59F
+            lblQuotientFrames.Text = (clipLength / numOfClips).ToString();
+            lblReminder.Text = (clipLength % numOfClips).ToString();
+        }
+
+        private void btnClearHistory_Click(object sender, EventArgs e)
+        {
+            listHistory.Items.Clear();
+        }
+
+        private bool BoringOldValidation(ref TextBox txtDivision)
+        {
+            if (Validator.IsEmpty(txtDivision))
+                return false;
+
+            if (!Validator.IsUInteger(txtDivision))
+            {
+                txtDivision.ForeColor = Color.Red;
+                return false;
+            }
+
+            txtDivision.ForeColor = Color.Black;
+            return true;
+        }
+
+        private void txtNumOfClips_TextChanged(object sender, EventArgs e)
+        {
+            if (txtNumOfClips.Text == "0")
+            {
+                txtNumOfClips.ForeColor = Color.Red;
+                btnModulus.Enabled = false;
+                return;
+            }
+            bool x = BoringOldValidation(ref txtNumOfClips);
+            bool y = BoringOldValidation(ref txtClipLengthInFrames);
+            if (x && y)
+                btnModulus.Enabled = true;
+            else
+                btnModulus.Enabled = false;
+        }
+
+        private void txtClipLengthInFrames_TextChanged(object sender, EventArgs e)
+        {
+            if (txtNumOfClips.Text == "0")
+            {
+                txtNumOfClips.ForeColor = Color.Red;
+                btnModulus.Enabled = false;
+                return;
+            }
+            bool x = BoringOldValidation(ref txtClipLengthInFrames);
+            bool y = BoringOldValidation(ref txtNumOfClips);
+            if (x && y)
+                btnModulus.Enabled = true;
+            else
+                btnModulus.Enabled = false;
+        }
+
+        private void listHistory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listHistory.SelectedIndex != -1)
+            {
+                btnRefClearTime.PerformClick();
+                btnEndClearTimes.PerformClick();
+
+                string? equalization = listHistory.SelectedItem.ToString();
+                if (equalization == null)
+                    return;
+                equalization = equalization.Replace(" ", "");
+                string[] addends = equalization.Split("=");
+                string leftSide = addends[0];
+                string rightSide = addends[1];
+                int minusPos = leftSide.IndexOf('-', comparisonType: StringComparison.Ordinal);
+
+                string refAddend = leftSide.Substring(0, minusPos);
+                string offsetAddend = leftSide.Substring(minusPos + 1);
+
+                //lblReferenceTime.Text = refAddend;
+                //lblEndTime.Text = offsetAddend;
+
+                
+
+                //maskRefTime.Text = refAddend;
+                //maskEndTime.Text = offsetAddend;
+
+                const int Plus_Ascii = 43;
+                const int Minus_Ascii = 45;
+                if (rightSide[0] == (char)Plus_Ascii || rightSide[0] == (char)Minus_Ascii)
+                {
+                    rightSide = rightSide.Substring(1);
+                }
+
+                VideoTimer refTimer = videoTimerFrame.ConvertTimeFormatToTokens(refAddend);
+                DisplayTimeInfo(ref lblReferenceTime, refTimer, ref lblRefFrame);
+                VideoTimer offTimer = videoTimerFrame.ConvertTimeFormatToTokens(offsetAddend);
+                DisplayTimeInfo(ref lblEndTime, offTimer, ref lblEndFrame);
+
+                int adjustmentFrames = videoTimerFrame.DeltaFrameOffset(refTimer, offTimer);
+                VideoTimer adjustmentTimer =
+                    videoTimerFrame.ConvertFrameCountToVideoTime(adjustmentFrames);
+                if (adjustmentFrames != 1)
+                    lblResultFrames.Text = $"{adjustmentFrames} Frames";
+                else
+                    lblResultFrames.Text = $"{adjustmentFrames} Frame";
+                lblResultTime.Text = adjustmentTimer.ToString();
+
+                if (adjustmentFrames < 0)
+                    lblSuggestion.Text = "Move the clip to the right. It is behind the target.";
+                else if (adjustmentFrames > 0)
+                    lblSuggestion.Text = "Move the clip to the left. It is ahead of the target.";
+                else
+                    lblSuggestion.Text = "The clip stays where it is.";
+
+
+                //int plusOrMinusPos = rightSide
+
+                //string[] split2 = equalization.Split("-");
+
+                //equalization = "";
+                //for (int i = 0; i < split1.Length; i++)
+                //    equalization += $"i{i + 1}: " + split1[i] + Environment.NewLine;
+                //for (int j = 0; j < split2.Length; j++)
+                //    equalization += $"j{j + 1}: " + split2[j] + Environment.NewLine;
+
+                //MessageBox.Show(equalization);
+            }
+
         }
     }
 }

@@ -13,6 +13,14 @@ namespace SyncFrameTool_NET
             frames = f;
         }
 
+        public VideoTimer(string h, string m, string s, string f)
+        {
+            hours = Convert.ToUInt16(h);
+            minutes = Convert.ToUInt16(m);
+            seconds = Convert.ToUInt16(s);
+            frames = Convert.ToUInt16(f);
+        }
+
         public void SetToZero() => hours = minutes = seconds = frames = 0;
 
         /// <summary>
@@ -65,6 +73,12 @@ namespace SyncFrameTool_NET
             }
             time.seconds = (ushort)seconds;
             return time;
+        }
+
+        public VideoTimer ConvertTimeFormatToTokens(string videoTimeLabel)
+        {
+            string[] times = videoTimeLabel.Split(':');
+            return new VideoTimer(times[0], times[1], times[2], times[3]);
         }
         
         public int DeltaFrameOffset(VideoTimer refTime, VideoTimer endTime)
