@@ -520,7 +520,7 @@ namespace SyncFrameTool_NET
                 equalization = equalization.Replace(" ", "");
                 string[] addends = equalization.Split("=");
                 string leftSide = addends[0];
-                string rightSide = addends[1];
+                //string rightSide = addends[1];
                 int minusPos = leftSide.IndexOf('-', comparisonType: StringComparison.Ordinal);
 
                 string refAddend = leftSide.Substring(0, minusPos);
@@ -529,17 +529,12 @@ namespace SyncFrameTool_NET
                 //lblReferenceTime.Text = refAddend;
                 //lblEndTime.Text = offsetAddend;
 
-                
-
-                //maskRefTime.Text = refAddend;
-                //maskEndTime.Text = offsetAddend;
-
-                const int Plus_Ascii = 43;
-                const int Minus_Ascii = 45;
-                if (rightSide[0] == (char)Plus_Ascii || rightSide[0] == (char)Minus_Ascii)
-                {
-                    rightSide = rightSide.Substring(1);
-                }
+                //const int Plus_Ascii = 43;
+                //const int Minus_Ascii = 45;
+                //if (rightSide[0] == (char)Plus_Ascii || rightSide[0] == (char)Minus_Ascii)
+                //{
+                //    rightSide = rightSide.Substring(1);
+                //}
 
                 VideoTimer refTimer = videoTimerFrame.ConvertTimeFormatToTokens(refAddend);
                 DisplayTimeInfo(ref lblReferenceTime, refTimer, ref lblRefFrame);
@@ -561,19 +556,6 @@ namespace SyncFrameTool_NET
                     lblSuggestion.Text = "Move the clip to the left. It is ahead of the target.";
                 else
                     lblSuggestion.Text = "The clip stays where it is.";
-
-
-                //int plusOrMinusPos = rightSide
-
-                //string[] split2 = equalization.Split("-");
-
-                //equalization = "";
-                //for (int i = 0; i < split1.Length; i++)
-                //    equalization += $"i{i + 1}: " + split1[i] + Environment.NewLine;
-                //for (int j = 0; j < split2.Length; j++)
-                //    equalization += $"j{j + 1}: " + split2[j] + Environment.NewLine;
-
-                //MessageBox.Show(equalization);
             }
 
         }
